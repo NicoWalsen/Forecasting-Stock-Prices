@@ -13,11 +13,12 @@ from neuralprophet import NeuralProphet
 import yfinance as yf
 import pandas as pd
 import matplotlib.pyplot as plt
+from datetime import datetime
 
 #DEFINING OUR PARAMETERS: STOCK, START DATE AND END DATE 
 stock_symbol = 'BABA' #(Alibaba)
 start_date = '2015-01-01'
-end_date = '2023-12-31'
+end_date = datetime.today()
 
 #DOWNLOADING DATA FROM YAHOO FINANCE WEBSITE AND CONVERTING IT TO A DATAFRAME IN CSV FILE
 stock_data = yf.download(stock_symbol,start=start_date, end=end_date)

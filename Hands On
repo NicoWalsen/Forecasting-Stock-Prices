@@ -1,0 +1,88 @@
+#1.-On the first place, we install in the 'Terminal'all libraries needed to perform our forecast with the comand -pip install [name of the library]-
+
+#In this case, we will install the following libraries:
+#pip install yfinance -----> "Used to access to download stock prices from "Yahoo Finance" https://finance.yahoo.com/"
+#pip install neuralprophet ----> "Used to predict time series. It performs better for high-frequency data series, at least of two years"
+#pip install pandas -----> "Used to work with dataframes"
+#pip install matplotlib -----> "Used to plot our results into graphs"
+
+#2.-We are ready to start coding!
+
+#IMPORTING MODULES AND LIBRARIES
+
+from neuralprophet import NeuralProphet
+import yfinance as yf
+import pandas as pd
+import matplotlib.pyplot as plt
+
+#DEFINING OUR PARAMETERS: STOCK, START DATE AND END DATE 
+
+stock_symbol = 'BABA' #(Alibaba)
+start_date = '2015-01-01'
+end_date = '2023-12-31'
+
+stock_data = yf.download(stock_symbol,start=start_date, end=end_date)
+print(stock_data.head())
+
+stock_data.to_csv('stock_data.csv')
+
+stocks = pd.read_csv('stock_data.csv')
+
+
+
+stocks.dtypes
+
+
+
+stocks['Date'] = pd.to_datetime(stocks['Date'])
+
+
+
+stocks = stocks[['Date','Close']]
+
+
+
+stocks
+
+
+
+stocks.dtypes
+
+
+
+stocks.columns = ['ds','y']
+
+
+
+stocks
+
+
+plt.plot(stocks['ds'],stocks['y'],label='actual', c='g')
+plt.grid()
+
+
+
+plt.show()
+
+
+
+#TRAIN THE MODEL
+
+model = NeuralProphet()
+model.fit(stocks)
+future = model.make_future_dataframe(stocks, periods = 365)
+forecast = model.predict(future)
+forecast
+
+actual_prediction = model.predict(stocks)
+
+
+plt.plot(actual_prediction['ds'],actual_prediction['yhat1'],label="prediction_actual",c='r')
+plt.plot(forecast['ds'],forecast['yhat1'],label="forecast",c='b')
+plt.plot(stocks['ds'],stocks['y'],label='actual', c='g')
+plt.legend()
+plt.show()
+plt.grid()
+
+
+

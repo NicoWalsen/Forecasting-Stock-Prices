@@ -1,2 +1,4 @@
 # Forecasting Stock Prices
- We will use machine learning to forecast stock prices from past data
+
+Summary:
+ We will pick stocks past data from Yahoo Finance to forecast their prices using machine learning.

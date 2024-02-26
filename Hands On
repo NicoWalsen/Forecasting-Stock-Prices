@@ -28,7 +28,10 @@ stock_data.to_csv('stock_data.csv')
 stocks = pd.read_csv('stock_data.csv')
 stocks.dtypes
 
-#PASING OUR DATE COLUMN FROM OBJECT TO DATATIME TYPE
+#DROPING POSSIBLE MISSING VALUES.
+stocks.dropna()
+
+#CHANGING CLASS TYPE FOR 'DATE' FROM OBJECT TO DATATIME.
 stocks['Date'] = pd.to_datetime(stocks['Date'])
 
 #WE SELECT JUST COLUMNS "DATE" AND "CLOSE" TO START OUR ANLYSIS
@@ -60,6 +63,9 @@ actual_prediction = model.predict(stocks)
 plt.plot(actual_prediction['ds'],actual_prediction['yhat1'],label="prediction_actual",c='r')
 plt.plot(forecast['ds'],forecast['yhat1'],label="forecast",c='b')
 plt.plot(stocks['ds'],stocks['y'],label='actual', c='g')
+plt.xlabel('Time')
+plt.ylabel('Price')
+plt.title('BABA stock forecasting')
 plt.legend()
 plt.show()
 plt.grid()

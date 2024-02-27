@@ -1,212 +1,71 @@
-#!/usr/bin/env python
-# coding: utf-8
+#1.-On the first place, we install in the 'Terminal'all libraries needed to perform our forecast with the comand -pip install [name of the library]-
 
-# In[1]:
+#In this case, we will install the following libraries:
+#pip install yfinance -----> "Used to access to download stock prices from "Yahoo Finance" https://finance.yahoo.com/"
+#pip install neuralprophet ----> "Used to predict time series. It performs better for high-frequency data series, at least of two years"
+#pip install pandas -----> "Used to work with dataframes"
+#pip install matplotlib -----> "Used to plot our results into graphs"
 
+#2.-We are ready to start coding!
 
-pip install yfinance
-
-
-# In[ ]:
-
-
-import os    
-
-
-# In[29]:
-
-
-os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
-
-
-# In[4]:
-
-
-pip install neuralprophet
-
-
-# In[31]:
-
-
+#IMPORTING MODULES AND LIBRARIES
 from neuralprophet import NeuralProphet
-
-
-# In[81]:
-
-
 import yfinance as yf
-
-
-# In[82]:
-
-
 import pandas as pd
-
-
-# In[83]:
-
-
 import matplotlib.pyplot as plt
+from datetime import datetime
 
-
-# In[84]:
-
-
-stock_symbol = 'BABA'#ALIBABA
-
-
-# In[108]:
-
-
+#DEFINING OUR PARAMETERS: STOCK, START DATE AND END DATE 
+stock_symbol = 'BABA' #(Alibaba)
 start_date = '2015-01-01'
+end_date = datetime.today()
 
-
-# In[109]:
-
-
-end_date = '2023-12-31'
-
-
-# In[110]:
-
-
+#DOWNLOADING DATA FROM YAHOO FINANCE WEBSITE AND CONVERTING IT TO A DATAFRAME IN CSV FILE
 stock_data = yf.download(stock_symbol,start=start_date, end=end_date)
-
-
-# In[111]:
-
-
 print(stock_data.head())
 
-
-# In[112]:
-
-
 stock_data.to_csv('stock_data.csv')
-
-
-# In[113]:
-
-
 stocks = pd.read_csv('stock_data.csv')
-
-
-# In[114]:
-
-
 stocks.dtypes
 
+#DROPING POSSIBLE MISSING VALUES.
+stocks.dropna()
 
-# In[115]:
-
-
+#CHANGING CLASS TYPE FOR 'DATE' FROM OBJECT TO DATATIME.
 stocks['Date'] = pd.to_datetime(stocks['Date'])
 
-
-# In[116]:
-
-
+#WE SELECT JUST COLUMNS "DATE" AND "CLOSE" TO START OUR ANLYSIS
 stocks = stocks[['Date','Close']]
-
-
-# In[117]:
-
-
 stocks
-
-
-# In[118]:
-
-
 stocks.dtypes
 
-
-# In[119]:
-
-
+#CHANGING THE NAME OF THE COLUMNS TO FROM "DATE" TO 'DS' AND FROM "CLOSE" TO 'Y'
 stocks.columns = ['ds','y']
-
-
-# In[120]:
-
-
 stocks
 
-
-# In[2]:
-
-
+#PLOTING OUR HISTORICAL DATA
 plt.plot(stocks['ds'],stocks['y'],label='actual', c='g')
 plt.grid()
-
-
-# In[122]:
-
-
 plt.show()
 
-
-# In[123]:
-
-
-#TRAIN THE MODEL
-
-
-# In[124]:
-
-
+#TRAINING THE MODEL WITH HISTORICAL DATA: stocks
 model = NeuralProphet()
-
-
-# In[125]:
-
-
 model.fit(stocks)
 
-
-# In[126]:
-
-
+#AFTER TRAINING OUR PREDICTOR MODEL, WE FORECAST 365 DAYS INTO THE FUTURE
 future = model.make_future_dataframe(stocks, periods = 365)
-
-
-# In[127]:
-
-
 forecast = model.predict(future)
-
-
-# In[128]:
-
-
 forecast
-
-
-# In[129]:
-
-
+# WE ALSO REQUEST THE MODEL TO "PREDICT" HISTORICAL DATA
 actual_prediction = model.predict(stocks)
 
-
-# In[130]:
-
-
+#FINALLY, WE WILL PLOT: HISTORICAL DATA, PREDICTION OF HISTORICAL DATA AND FORECAST.
 plt.plot(actual_prediction['ds'],actual_prediction['yhat1'],label="prediction_actual",c='r')
 plt.plot(forecast['ds'],forecast['yhat1'],label="forecast",c='b')
 plt.plot(stocks['ds'],stocks['y'],label='actual', c='g')
+plt.xlabel('Time')
+plt.ylabel('Price')
+plt.title('BABA stock forecasting')
 plt.legend()
 plt.show()
-plot.grid()
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
+plt.grid()

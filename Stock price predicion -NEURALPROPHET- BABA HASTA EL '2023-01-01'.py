@@ -52,7 +52,7 @@ plt.show()
 model = NeuralProphet()
 model.fit(stocks)
 
-#AFTER TRAINING OUR PREDICTOR MODEL, WE FORECAST 365 DAYS INTO THE FUTURE
+#AFTER TRAINING OUR PREDICTOR MODEL, WE WILL FORECAST 365 DAYS INTO THE FUTURE
 future = model.make_future_dataframe(stocks, periods = 365)
 forecast = model.predict(future)
 forecast

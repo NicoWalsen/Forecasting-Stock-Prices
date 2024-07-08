@@ -1,12 +1,3 @@
-#1.-On the first place, we install in the 'Terminal'all libraries needed to perform our forecast with the comand -pip install [name of the library]-
-
-#In this case, we will install the following libraries:
-#pip install yfinance -----> "Used to access to download stock prices from "Yahoo Finance" https://finance.yahoo.com/"
-#pip install neuralprophet ----> "Used to predict time series. It performs better for high-frequency data series, at least of two years"
-#pip install pandas -----> "Used to work with dataframes"
-#pip install matplotlib -----> "Used to plot our results into graphs"
-
-#2.-We are ready to start coding!
 
 #IMPORTING MODULES AND LIBRARIES
 from neuralprophet import NeuralProphet
